@@ -1,0 +1,33 @@
+  <div class="bg-white p-6 rounded-xl shadow-sm text-center">
+    <h2 class="text-2xl font-bold text-pink-500 mb-1">Centro Pokémon</h2>
+    <p class="text-slate-500 text-sm mb-6">A Enfermeira Joy está esperando.</p>
+
+    <div class="mb-4 flex justify-center relative">
+      <div class="absolute inset-0 bg-pink-100 rounded-full scale-75 blur-xl opacity-50"></div>
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/113.gif" class="h-28 relative z-10" alt="Chansey">
+    </div>
+
+    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6">
+      <div class="flex justify-between text-xs font-bold text-slate-400 mb-1 uppercase">
+        <span>Energia do Time</span>
+        <span>{{ energy() }}</span>
+      </div>
+      <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+        <div 
+          class="h-full transition-all duration-1000 ease-out relative"
+          [class]="energy() > 50 ? 'bg-green-500' : energy() > 20 ? 'bg-yellow-400' : 'bg-red-500'"
+          [style.width.%]="energy()">
+          <div class="absolute inset-0 bg-white opacity-20 w-full animate-pulse"></div>
+        </div>
+      </div>
+    </div>
+
+    <button 
+      (click)="!isFullLife() && healRequest.emit()"
+      class="w-full font-bold py-3 px-6 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+      [class]="isFullLife()
+        ? 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none' 
+        : 'bg-pink-500 hover:bg-pink-600 text-white hover:shadow-lg active:translate-y-0.5'">
+      <span>{{ isFullLife() ? 'Energia Cheia' : '💖 Recuperar Saúde' }}</span>
+    </button>
+  </div>
