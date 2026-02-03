@@ -1,33 +1,30 @@
 import { Component, signal, computed, effect } from '@angular/core';
-import { Header } from './components/header/header';
-import { Gym } from './components/gym/gym';
-import { Center } from "./components/center/center";
 
 @Component({
   selector: 'app-root',
-  imports: [Header, Gym, Center],
+  imports: [],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
+  // Defina os estados iniciais aqui (ex: money = signal(50))
   money = signal(50);
   energy = signal(100);
- 
+  
+  // Crie um computed signal para saber se está cansado ou vida cheia
   isTired = computed(() => this.energy() < 10);
   isFullLife = computed(() => this.energy() === 100);
 
+  // Use um effect para logar no console quando o dinheiro mudar
   logEffect = effect(() => {
     console.log('Dinheiro atual:', this.money());
-    console.log('Energia atual:', this.energy());
   });
   
   battle() {
-    const randomNumberBetween0and10 = Math.floor(Math.random() * 11);
-    this.money.update(value => value + 15 + randomNumberBetween0and10);
-    this.energy.update(value => value - 10);
+    // TODO: Só batalha se tiver energia. Custa 10 de energia, ganha 20 money.
   }
 
   heal() {
-    this.energy.set(100);
+    // TODO: Recupera energia para 100.
   }
 }
