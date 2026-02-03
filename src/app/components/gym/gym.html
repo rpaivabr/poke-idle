@@ -10,8 +10,8 @@
   </div>
 
   <!-- Use @if para desabilitar ou esconder o botão se estiver cansado (isTired) -->
-  @if (!isTired()) {
-  <button (click)="battleRequest.emit()"
+  @if (!game.isTired()) {
+  <button (click)="game.battle()"
     class="mb-4 w-full bg-red-500 text-white font-bold py-3 rounded-xl hover:bg-red-600 transition disabled:bg-gray-300">
     Batalhar (-10 ⚡)
   </button>

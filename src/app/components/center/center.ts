@@ -1,4 +1,5 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Game } from '../../services/game';
 
 @Component({
   selector: 'app-center',
@@ -7,8 +8,5 @@ import { Component, computed, input, output } from '@angular/core';
   styleUrl: './center.css',
 })
 export class Center {
-  energy = input.required<number>();
-  healRequest = output<void>();
-
-  isFullLife = computed(() => this.energy() === 100);
+  game = inject(Game);
 }

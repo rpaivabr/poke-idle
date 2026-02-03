@@ -11,22 +11,22 @@
   <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6">
     <div class="flex justify-between text-xs font-bold text-slate-400 mb-1 uppercase">
       <span>Energia do Time</span>
-      <span>{{ energy() }}</span>
+      <span>{{ game.energy() }}</span>
     </div>
     <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
       <div class="h-full transition-all duration-1000 ease-out relative"
-        [class]="energy() > 50 ? 'bg-green-500' : energy() > 20 ? 'bg-yellow-400' : 'bg-red-500'"
-        [style.width.%]="energy()">
+        [class]="game.energy() > 50 ? 'bg-green-500' : game.energy() > 20 ? 'bg-yellow-400' : 'bg-red-500'"
+        [style.width.%]="game.energy()">
         <div class="absolute inset-0 bg-white opacity-20 w-full animate-pulse"></div>
       </div>
     </div>
   </div>
 
-  <button (click)="!isFullLife() && healRequest.emit()"
+  <button (click)="!game.isFullLife() && game.heal()"
     class="w-full font-bold py-3 px-6 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
-    [class]="isFullLife()
+    [class]="game.isFullLife()
         ? 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none' 
         : 'bg-pink-500 hover:bg-pink-600 text-white hover:shadow-lg active:translate-y-0.5'">
-    <span>{{ isFullLife() ? 'Energia Cheia' : '💖 Recuperar Saúde' }}</span>
+    <span>{{ game.isFullLife() ? 'Energia Cheia' : '💖 Recuperar Saúde' }}</span>
   </button>
 </div>

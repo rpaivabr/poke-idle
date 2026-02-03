@@ -1,4 +1,5 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Game } from '../../services/game';
 
 @Component({
   selector: 'app-header',
@@ -7,8 +8,5 @@ import { Component, computed, input } from '@angular/core';
   styleUrl: './header.css',
 })
 export class Header {
-  money = input.required<number>();
-  energy = input.required<number>();
-
-  isTired = computed(() => this.energy() < 10);
+  game = inject(Game);
 }

@@ -276,16 +276,16 @@ export class Navbar {}
 
 ```typescript
 export const routes: Routes = [
-  { path: 'gym', component: GymComponent },
-  { path: 'center', component: CenterComponent },
-  { path: '', redirectTo: 'gym', pathMatch: 'full' }
+  { path: 'gym', component: Gym },
+  { path: 'center', component: Center},
+  { path: '**', redirectTo: '/gym' },
   // Adicione novas rotas aqui se criar novos componentes
 ];
 ```
 
 ### 3.3 Game Service (`services/game.ts`)
 
-Mova a lógica (`money`, `energy`, `battle()`, `heal()`) do `AppComponent` para cá.
+Mova a lógica (`money`, `energy`, `battle()`, `heal()`) do componente `App` para cá.
 
 ### 3.4 Atualizando os Componentes
 

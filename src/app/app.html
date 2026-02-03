@@ -1,7 +1,5 @@
 <div class="max-w-md mx-auto p-4 bg-gray-50 min-h-screen font-sans selection:bg-red-200 text-slate-900">
-  <!-- O pai (App) passa os dados para o filho (header) via [property] -->
-  <app-header [money]="money()" [energy]="energy()" />
-  <!-- o filho (Gym) avisa o pai via (event) -->
-  <app-gym [energy]="energy()" (battleRequest)="battle()" />
-  <app-center [energy]="energy()" (healRequest)="heal()" />
+  <app-header />
+  <router-outlet />
+  <app-navbar />
 </div>
