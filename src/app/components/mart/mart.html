@@ -1,0 +1,44 @@
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-20 animate-fade-in">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-blue-600">PokéMart</h2>
+    </div>
+
+    @if (loading()) {
+      <div class="text-center py-10 text-slate-400 flex flex-col items-center">
+        <div class="w-8 h-8 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin mb-2"></div>
+        <p>Carregando catálogo...</p>
+      </div>
+    }
+
+    <div class="grid grid-cols-2 gap-3 mb-6">
+      @for (item of items(); track item.name) {
+        <div class="border border-slate-100 rounded-lg p-3 flex flex-col items-center transition bg-slate-50 relative overflow-hidden group">
+          <img [src]="item.image" class="w-12 h-12 mb-2" />
+          
+          <h3 class="font-bold text-slate-700 capitalize text-xs mb-1 truncate w-full text-center">{{ item.name }}</h3>
+          <span class="text-green-600 font-bold mb-2 text-sm">💰 {{ item.price }}</span>
+          
+          <button 
+            class="w-full py-1.5 px-2 rounded text-[10px] font-bold uppercase tracking-wider transition-all text-slate-400"
+            [class]="game.money() >= item.price ? 'bg-blue-500 text-white shadow-sm' : 'bg-slate-200'"
+            [disabled]="game.money() < item.price"
+            (click)="game.buyItem(item.price, item.name)">
+            {{ game.money() >= item.price ? 'Comprar' : 'Sem Grana' }}
+          </button>
+        </div>
+      }
+    </div>
+
+    <div class="border-t pt-4 border-slate-100">
+      <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3">Sua Mochila ({{ game.inventory().length }})</h3>
+      <div class="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
+        @for (item of game.inventory(); track $index) {
+          <span class="bg-slate-800 text-white text-[10px] py-1 px-2 rounded-full capitalize flex items-center gap-1 animate-pop-in">
+            <span>🛍️</span> {{ item }}
+          </span>
+        } @empty {
+          <span class="text-slate-400 text-sm italic w-full text-center py-2">Mochila vazia...</span>
+        }
+      </div>
+    </div>
+  </div>

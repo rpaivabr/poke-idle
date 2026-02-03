@@ -285,11 +285,11 @@ export const routes: Routes = [
 
 ### 3.3 Game Service (`services/game.ts`)
 
-Mova a lógica (`money`, `energy`, `battle()`, `heal()`) do componente `App` para cá.
+Mova a lógica (`money`, `energy`, `battle()`, `heal()`, etc.) do componente `App` para cá.
 
 ### 3.4 Atualizando os Componentes
 
-Agora os componentes não recebem mais `@Input` do pai. Eles devem injetar o serviço diretamente!
+Agora os componentes não recebem mais `input()` do pai. Eles devem injetar o serviço diretamente!
 
 ```typescript
 // Exemplo no componente Gym
@@ -313,73 +313,92 @@ ng g c components/mart
 
 * **Async:** Dados da web demoram. Precisamos lidar com "Loading".
 
-### 4.1 Configuração Global (`app.config.ts`)
-
-Adicione `provideHttpClient()` nos providers.
-
-### 4.2 Mart Logic (`components/mart/mart.component.ts`)
+### 4.1 Mart Component (`components/mart.ts`)
 
 ```typescript
-export class MartComponent {
-  http = inject(HttpClient);
-  game = inject(GameService); // Para gastar dinheiro
+import { httpResource } from '@angular/common/http';
+import { Component, computed, inject } from '@angular/core';
+import { Game } from '../../services/game';
 
-  items = signal<any[]>([]); // Lista de itens
-  loading = signal(true);
+type ApiResponse = {
+  results: ItemResult[];
+}
 
-  constructor() {
-    this.fetchItems();
-  }
+type ItemResult = {
+  name: string;
+  url: string;
+}
 
-  fetchItems() {
-    // URL: https://pokeapi.co/api/v2/item?limit=10
-    // DICA: Use this.http.get(...).subscribe(...)
-    // DICA: Ao terminar, set loading para false
-  }
+type Item = {
+  name: string;
+  price: number;
+  image: string;
+}
 
-  buy(item: any) {
-    // Valide se tem dinheiro e chame o service
-  }
+@Component({
+  selector: 'app-mart',
+  imports: [],
+  templateUrl: './mart.html',
+  styleUrl: './mart.css',
+})
+export class Mart {
+  game = inject(Game);
+  apiData = httpResource<ApiResponse>(() => 'https://pokeapi.co/api/v2/item?limit=6&offset=5');
+  items = computed(() => this.apiData.value()?.results.map((r: ItemResult, i: number) => ({
+    name: r.name.replace('-', ' '),
+    price: (i + 1) * 35,
+    image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${r.name}.png`
+  } as Item)));
+  loading = computed(() => this.apiData.isLoading())
 }
 ```
 
-## 🔎 Passo 5 (Bônus): Filtros com Computed
-
-**Objetivo:** Adicionar uma busca na loja que filtra os itens instantaneamente.
-
-**Teoria:**
-
-* **Computed Signal:** Se o texto da busca mudar OU a lista mudar, o filtro atualiza sozinho.
-
-### 5.1 Lógica
-
-```typescript
-// No MartComponent
-searchText = signal('');
-
-// Substitua o items = signal([]) por:
-allItems = signal<any[]>([]);
-
-// O computed mágico
-filteredItems = computed(() => {
-  const term = this.searchText().toLowerCase();
-  return this.allItems().filter(i => i.name.includes(term));
-});
-```
-
-### 5.2 HTML
-
-Adicione um input no topo da loja:
-
 ```html
-<input 
-  #search
-  (input)="searchText.set(search.value)"
-  placeholder="Buscar item..."
-  class="w-full p-2 border rounded mb-4"
->
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-20 animate-fade-in">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-blue-600">PokéMart</h2>
+    </div>
 
-<!-- Mude o loop @for para usar filteredItems() -->
+    @if (loading()) {
+      <div class="text-center py-10 text-slate-400 flex flex-col items-center">
+        <div class="w-8 h-8 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin mb-2"></div>
+        <p>Carregando catálogo...</p>
+      </div>
+    }
+
+    <div class="grid grid-cols-2 gap-3 mb-6">
+      @for (item of items(); track item.name) {
+        <div class="border border-slate-100 rounded-lg p-3 flex flex-col items-center transition bg-slate-50 relative overflow-hidden group">
+          <img [src]="item.image" class="w-12 h-12 mb-2" />
+          
+          <h3 class="font-bold text-slate-700 capitalize text-xs mb-1 truncate w-full text-center">{{ item.name }}</h3>
+          <span class="text-green-600 font-bold mb-2 text-sm">💰 {{ item.price }}</span>
+          
+          <button 
+            class="w-full py-1.5 px-2 rounded text-[10px] font-bold uppercase tracking-wider transition-all text-slate-400"
+            [class]="game.money() >= item.price ? 'bg-blue-500 text-white shadow-sm' : 'bg-slate-200'"
+            [disabled]="game.money() < item.price"
+            (click)="game.buyItem(item.price, item.name)">
+            {{ game.money() >= item.price ? 'Comprar' : 'Sem Grana' }}
+          </button>
+        </div>
+      }
+    </div>
+
+    <div class="border-t pt-4 border-slate-100">
+      <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3">Sua Mochila ({{ game.inventory().length }})</h3>
+      <div class="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
+        @for (item of game.inventory(); track $index) {
+          <span class="bg-slate-800 text-white text-[10px] py-1 px-2 rounded-full capitalize flex items-center gap-1 animate-pop-in">
+            <span>🛍️</span> {{ item }}
+          </span>
+        } @empty {
+          <span class="text-slate-400 text-sm italic w-full text-center py-2">Mochila vazia...</span>
+        }
+      </div>
+    </div>
+  </div>
 ```
+
 
 **Parabéns! Você criou uma aplicação Angular Reativa completa!** 🚀
