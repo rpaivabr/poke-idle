@@ -5,6 +5,10 @@ O objetivo é entender como o **Angular** funciona na prática.
 
 **Conceitos:** Signals, Components, Services, Routing, HTTP e Control Flow.
 
+### Links Úteis:
+[Firebase Studio](https://idx.google.com/)
+[Angular Documentation](https://angular.dev/)
+
 ## 🚀 Preparação (Setup)
 
 No terminal do seu ambiente, vamos criar os arquivos necessários conforme avançamos.
@@ -181,7 +185,7 @@ ng g c components/center
 ### 2.1 Refatorando
 
 Mova o HTML correspondente para cada componente novo.
-No `AppComponent`, o HTML deve ficar limpo assim:
+No componente `App`, o HTML deve ficar limpo assim:
 
 ```html
 <div class="max-w-md mx-auto p-4 bg-gray-50 min-h-screen font-sans selection:bg-red-200 text-slate-900">
@@ -193,7 +197,7 @@ No `AppComponent`, o HTML deve ficar limpo assim:
 </div>
 ```
 
-### 2.2 Exemplo: Gym Component (`components/gym/gym.component.ts`)
+### 2.2 Exemplo: Gym Component (`components/gym/gym.ts`)
 
 ```typescript
 import { Component, computed, input, output } from '@angular/core';
@@ -231,9 +235,42 @@ ng g c components/navbar
 
 * **Router:** Troca o componente visível baseado na URL.
 
-### 3.1 Game Service (`services/game.service.ts`)
+### 3.1 Navbar Component (`components/navbar.ts`)
 
-Mova a lógica (`money`, `energy`, `battle()`, `heal()`) do `AppComponent` para cá.
+```typescript
+import { Component } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+
+@Component({
+  selector: 'app-navbar',
+  imports: [RouterLink, RouterLinkActive],
+  templateUrl: './navbar.html',
+  styleUrl: './navbar.css',
+})
+export class Navbar {}
+```
+
+```html
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 pb-safe z-40">
+  <div class="max-w-md mx-auto flex justify-around p-2">
+    <a routerLink="/gym" routerLinkActive="text-red-600 bg-red-50"
+      class="flex-1 text-center p-2 rounded-xl text-slate-400 transition-all active:scale-95 flex flex-col items-center gap-1">
+      <span class="text-2xl">🥊</span>
+      <span class="text-[10px] font-bold uppercase tracking-wide">Ginásio</span>
+    </a>
+    <a routerLink="/mart" routerLinkActive="text-blue-600 bg-blue-50"
+      class="flex-1 text-center p-2 rounded-xl text-slate-400 transition-all active:scale-95 flex flex-col items-center gap-1">
+      <span class="text-2xl">🛒</span>
+      <span class="text-[10px] font-bold uppercase tracking-wide">Loja</span>
+    </a>
+    <a routerLink="/center" routerLinkActive="text-pink-600 bg-pink-50"
+      class="flex-1 text-center p-2 rounded-xl text-slate-400 transition-all active:scale-95 flex flex-col items-center gap-1">
+      <span class="text-2xl">🏥</span>
+      <span class="text-[10px] font-bold uppercase tracking-wide">Centro</span>
+    </a>
+  </div>
+</nav>
+```
 
 ### 3.2 Configurando Rotas (`app.routes.ts`)
 
@@ -246,13 +283,17 @@ export const routes: Routes = [
 ];
 ```
 
-### 3.3 Atualizando os Componentes
+### 3.3 Game Service (`services/game.ts`)
+
+Mova a lógica (`money`, `energy`, `battle()`, `heal()`) do `AppComponent` para cá.
+
+### 3.4 Atualizando os Componentes
 
 Agora os componentes não recebem mais `@Input` do pai. Eles devem injetar o serviço diretamente!
 
 ```typescript
-// Exemplo no GymComponent
-game = inject(GameService);
+// Exemplo no componente Gym
+game = inject(Game);
 // No HTML: {{ game.energy() }}
 ```
 

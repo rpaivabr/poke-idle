@@ -1,16 +1,13 @@
-
 <header class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm mb-6">
   <h1 class="font-black text-xl italic text-slate-800">
     <span class="text-red-500">Poké</span>Idle
   </h1>
   <div class="flex gap-2">
-    <div 
-      class="bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 flex items-center gap-2">
+    <div class="bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 flex items-center gap-2">
       <span class="text-lg">💰</span>
       <span class="font-mono font-bold text-slate-700">{{ money() }}</span>
     </div>
-    <div 
-      class="bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 flex items-center gap-2">
+    <div class="bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 flex items-center gap-2">
       <span class="text-lg">⚡</span>
       <span class="font-mono font-bold {{isTired() ? 'text-red-500' : 'text-slate-700'}}">{{ energy() }}</span>
     </div>

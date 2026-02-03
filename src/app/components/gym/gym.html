@@ -1,24 +1,24 @@
-  <div class="bg-white p-6 rounded-xl shadow-sm text-center mb-4">
-    <h2 class="text-2xl font-bold text-slate-800 mb-1">Arena de Treino</h2>
-    <p class="text-slate-500 text-sm mb-6">Treine para ganhar PokéDólares!</p>
-  
-    <div class="mb-4 flex justify-center relative">
-      <div class="absolute inset-0 bg-pink-100 rounded-full scale-75 blur-xl opacity-50"></div>
-      <!-- pode trocar o pokemon. ex: 1 bulbasauro 4 charmander 7 squirtle -->
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/214.gif" class="h-32 mb-4 relative">
-    </div>
-    
-    <!-- Use @if para desabilitar ou esconder o botão se estiver cansado (isTired) -->
-    @if (!isTired()) {
-      <button 
-        (click)="battleRequest.emit()"
-        class="mb-4 w-full bg-red-500 text-white font-bold py-3 rounded-xl hover:bg-red-600 transition disabled:bg-gray-300">
-        Batalhar (-10 ⚡)
-      </button>
-    } @else {
-      <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-700 p-4 rounded text-left" role="alert">
-        <p class="font-bold">Pokémon Exausto!</p>
-        <p class="text-sm">Vá ao Centro Pokémon para descansar.</p>
-      </div>
-    }
+<div class="bg-white p-6 rounded-xl shadow-sm text-center mb-4">
+  <h2 class="text-2xl font-bold text-slate-800 mb-1">Arena de Treino</h2>
+  <p class="text-slate-500 text-sm mb-6">Treine para ganhar PokéDólares!</p>
+
+  <div class="mb-4 flex justify-center relative">
+    <div class="absolute inset-0 bg-pink-100 rounded-full scale-75 blur-xl opacity-50"></div>
+    <!-- pode trocar o pokemon. ex: 1 bulbasauro 4 charmander 7 squirtle -->
+    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/25.gif"
+      class="h-32 mb-4 relative">
   </div>
+
+  <!-- Use @if para desabilitar ou esconder o botão se estiver cansado (isTired) -->
+  @if (!isTired()) {
+  <button (click)="battleRequest.emit()"
+    class="mb-4 w-full bg-red-500 text-white font-bold py-3 rounded-xl hover:bg-red-600 transition disabled:bg-gray-300">
+    Batalhar (-10 ⚡)
+  </button>
+  } @else {
+  <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-700 p-4 rounded text-left" role="alert">
+    <p class="font-bold">Pokémon Exausto!</p>
+    <p class="text-sm">Vá ao Centro Pokémon para descansar.</p>
+  </div>
+  }
+</div>
